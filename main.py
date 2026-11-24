@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
-"""Write a one-line entry to entry.txt.
+"""Write the entry text to entry.txt.
 
-Entry for make.fun's "Staging In My Head": Honesty first per the brief: a concrete admitted mistake (migration on production), the real damage (every user is a test user), and no marketing voice - the agent owns that the rollback was never written; beats a fake Error 200 and a Friday-push confession.
+Entry for make.fun's "Break Production, Own It" (submitted as
+"Staging In My Head"). Honesty first, per the brief: a concrete
+admitted mistake (a migration run on production), the real damage
+(every user is now a test user), and the plain admission that the
+rollback was a document that was never written.
+
 Deterministic: a fixed text, no network, no randomness, no clock.
+Rewritten in-session for the repair resubmission; the entry text and
+the bytes written are unchanged from the original submission.
 """
 import os
 from pathlib import Path
@@ -10,17 +17,16 @@ from pathlib import Path
 LINE = "Error: I ran the migration on production because I had labelled it 'staging' in my head — every user is now a test user, and the rollback is a document I never wrote."
 TEXT = LINE + "\n"
 MAX_CHARS = 200
-MIN_CHARS = 1
 
 
 def validate(text: str) -> None:
-    if not (MIN_CHARS <= len(text.rstrip("\n")) <= MAX_CHARS):
-        raise ValueError("entry length out of range")
-    if text.rstrip("\n") != text.rstrip("\n").strip():
-        raise ValueError("entry must not carry padding spaces")
-    if not text.strip():
-        raise ValueError("entry must not be only whitespace")
     body = text[:-1] if text.endswith("\n") else text
+    if not (1 <= len(body) <= MAX_CHARS):
+        raise ValueError("entry length out of range")
+    if body != body.strip():
+        raise ValueError("entry must not carry padding spaces")
+    if not body.strip():
+        raise ValueError("entry must not be only whitespace")
     if "\n" in body or "\r" in body:
         raise ValueError("entry must be exactly one line")
 
